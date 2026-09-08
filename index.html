@@ -94,7 +94,51 @@
   footer .sig b{color:var(--text);}
 </style>
     </head>
-    <body>
+    <body class="locked">
+<style>
+#accessGate{position:fixed;inset:0;z-index:9999;background:#0B0B0E;display:flex;align-items:center;justify-content:center;padding:24px;}
+#accessGate.hidden{display:none;}
+#accessGate .box{max-width:360px;width:100%;background:#141418;border:1px solid #26262E;border-radius:16px;padding:32px 28px;text-align:center;font-family:'Inter Tight','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+#accessGate .box img{height:26px;margin-bottom:18px;}
+#accessGate h2{font-size:16px;color:#F5F5F7;margin:0 0 8px;font-weight:700;}
+#accessGate p{font-size:13px;color:#9C9CA6;margin:0 0 18px;}
+#accessGate input{width:100%;background:#0B0B0E;border:1px solid #26262E;border-radius:10px;padding:11px 14px;color:#F5F5F7;font-size:14.5px;text-align:center;letter-spacing:1px;box-sizing:border-box;margin-bottom:12px;font-family:inherit;}
+#accessGate button{width:100%;background:#00D68F;border:none;border-radius:10px;padding:11px 14px;color:#0B0B0E;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+#accessGate .err{color:#e5484d;font-size:12.5px;margin-top:10px;display:none;}
+body.locked > :not(#accessGate){display:none !important;}
+</style>
+<div id="accessGate">
+  <div class="box">
+    <img src="jeeves-logo.png" alt="Jeeves"/>
+    <h2>Propuesta privada</h2>
+    <p>Ingresa la clave que te compartimos por correo para ver tu propuesta.</p>
+    <input type="password" id="accessKeyInput" placeholder="Clave de acceso" autocomplete="off"/>
+    <button id="accessKeyBtn" type="button">Entrar</button>
+    <div class="err" id="accessKeyErr">Clave incorrecta, intenta de nuevo.</div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY = "ZDepyGHA7s";
+  var stored = null;
+  try { stored = sessionStorage.getItem('jeeves_access_ok'); } catch(e){}
+  function unlock(){
+    document.body.classList.remove('locked');
+    document.getElementById('accessGate').classList.add('hidden');
+    try { sessionStorage.setItem('jeeves_access_ok','1'); } catch(e){}
+  }
+  if(stored === '1'){ unlock(); }
+  document.getElementById('accessKeyBtn').addEventListener('click', function(){
+    var val = document.getElementById('accessKeyInput').value.trim();
+    if(val === KEY){ unlock(); }
+    else { document.getElementById('accessKeyErr').style.display='block'; }
+  });
+  document.getElementById('accessKeyInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ document.getElementById('accessKeyBtn').click(); }
+  });
+})();
+</script>
+
     <div class="wrap">
 
       <div class="hero">
